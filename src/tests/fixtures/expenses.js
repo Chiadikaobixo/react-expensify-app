@@ -19,3 +19,4 @@ export default [{
     amount: 3500,
     createdAt: moment(0).add(4, 'days').valueOf()
 }]
+
