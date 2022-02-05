@@ -1,5 +1,5 @@
 import db from '../firebase/firebase'
-import { ref, push} from 'firebase/database';
+import { ref, push, get} from 'firebase/database';
 
 //Expense Action generator
 export const addExpense = (expense) => ({
@@ -26,7 +26,6 @@ export const startAddExpense = (expenseData = {}) => {
             })
     }
 }
-
   
 export const removeExpense = ({id} = {}) => ({
     type: 'REMOVE_EXPENSE',
@@ -38,3 +37,24 @@ export const editExpense = (id, updates) => ({
     id,
     updates
 })
+
+export const setExpense = (expenses) => ({
+    type: 'SET_EXPENSE',
+    expenses
+})
+
+export const startSetExpense = () => {
+    return (dispatch) => {
+        return get(ref(db, 'expenses')).then((snapshot) => {
+            const expenses = []
+            
+            snapshot.forEach((childSnapshot) => {
+                expenses.push({
+                    id: childSnapshot.key,
+                    ...childSnapshot.val()
+                })
+            })
+            dispatch(setExpense(expenses))
+        })
+    }
+}

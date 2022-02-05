@@ -1,11 +1,25 @@
 import configureStore from 'redux-mock-store'
 import thunk from 'redux-thunk'
-import { startAddExpense, addExpense, editExpense, removeExpense } from "../../actions/expenses";
+import { startAddExpense,
+    addExpense,
+    editExpense,
+    removeExpense,
+    setExpense,
+    startSetExpense
+} from "../../actions/expenses";
 import expenses from '../fixtures/expenses'
 import db from '../../firebase/firebase'
-import { get, ref } from 'firebase/database';
+import { get, ref, set } from 'firebase/database';
 
 const createMockStore = configureStore([thunk])
+
+beforeEach((done) => {
+    const expenseData = {}
+    expenses.forEach(({ id, description, note, amount, createdAt}) => {
+        expenseData[id] = {description, note, amount, createdAt}
+    })
+    set(ref(db, 'expenses'), expenseData).then(() => done())
+})
 
 test('should setup addExpense action generator with provided values', () => {
     const action = addExpense(expenses[2]);
@@ -63,22 +77,25 @@ test('should add expense with defaults to database and store', (done) => {
     })
 })
 
-// test('should setup addExpense action generator with defaults values', () => {
-//     const expenseData = {
-//         description: '',
-//         note: '', 
-//         amount: 0, 
-//         createdAt: 0
-//         }
-//     const action = addExpense(expenseData);
-//     expect(action).toEqual({
-//         type: 'ADD_EXPENSE',
-//         expense: {
-//             ...expenseData,
-//             id: expect.any(String)
-//         }
-//     })
-// })
+test('should setup set expense action object with data', () => {
+    const action = setExpense(expenses)
+    expect(action).toEqual({
+        type: 'SET_EXPENSE',
+        expenses
+    })
+})
+
+test('should fetch the expenses from firebase', (done) => {
+    const store = createMockStore({})
+    store.dispatch(startSetExpense()).then(() => {
+        const actions = store.getActions();
+        expect(actions[0]).toEqual({
+            type: 'SET_EXPENSE',
+            expenses
+        })
+        done()
+    })
+})
 
 test('should test editExpenses', () => {
     const action = editExpense( '123abc', 'chiadi')
