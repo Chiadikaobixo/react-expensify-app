@@ -1,5 +1,5 @@
 import db from '../firebase/firebase'
-import { ref, push, get} from 'firebase/database';
+import { ref, push, get, remove} from 'firebase/database';
 
 //Expense Action generator
 export const addExpense = (expense) => ({
@@ -32,6 +32,14 @@ export const removeExpense = ({id} = {}) => ({
     id
 })
   
+export const startRemoveExpense = ({id} = {}) => {
+    return(dispatch) => {
+       return remove(ref(db, `expenses/${id}`)).then(() => {
+        dispatch(removeExpense({id}))
+       })
+    }
+}
+
 export const editExpense = (id, updates) => ({
     type: 'EDIT_EXPENSE',
     id,
