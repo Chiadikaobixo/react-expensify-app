@@ -3,7 +3,7 @@ import ExpenseDashboardPage from '../components/ExpenseDashboardPage';
 import AddExpensePage from '../components/AddExpensePage';
 import EditExpensePage from '../components/EditExpensePage';
 import NotFoundPage from '../components/NotFoundPage';
-import createHistory from 'history/createBrowserHistory'
+import createHistory from 'history/createBrowserHistory';
 import LoginPage from '../components/LoginPage';
 import { Router, Route, Switch } from "react-router-dom";
 import PrivateRoute from './PrivateRoute'
