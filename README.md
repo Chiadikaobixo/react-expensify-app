@@ -1,5 +1,5 @@
-# Expensify
-Expensify Application that helps users to keep track of their Expenses. 
+# Expensify  
+Expensify Application that helps users to keep track of their Expenses.   
 📌Click [here](https://react-expensify-app1.herokuapp.com "expensify App") to checkout the deployed application.
 
 Built with  
